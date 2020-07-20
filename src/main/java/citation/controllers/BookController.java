@@ -21,6 +21,11 @@ public class BookController {
 	
 	@Resource BookService bookService;
 	
+	@GetMapping("/hw")
+	public String HelloWorld() throws InterruptedException, ExecutionException{
+		return "Hello World";
+	}
+	
 	@GetMapping("/all")
 	public List<Book> getAllCitations() throws InterruptedException, ExecutionException{
 		return bookService.getAllBooks();
