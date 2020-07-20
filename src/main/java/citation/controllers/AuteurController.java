@@ -10,9 +10,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +23,7 @@ import citation.domain.Auteur;
 import citation.services.AuteurService;
 
 @RestController
+@RequestMapping("/auteur")
 public class AuteurController {
 
 	@Resource AuteurService auteurService;
@@ -29,18 +32,12 @@ public class AuteurController {
 	public List<Auteur> getAllAuteurs() throws InterruptedException, ExecutionException{
 		return auteurService.getAllAuteurs();
 	}
-
-    @GetMapping("/getAuteurDetails")
-    public Auteur getAuteur(@RequestParam String name ) throws InterruptedException, ExecutionException{
-    	String uri = "http://localhost:8080/";
-		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		HttpEntity<String> request = 
-			      new HttpEntity<String>(name, headers);
-	    String result = restTemplate.postForObject(uri, request, String.class);
-    	//System.out.println(name);
-        return auteurService.getAuteurDetails(name);
+    
+    @GetMapping("/{id}")
+    public Auteur getAuteur(@PathVariable int id) throws InterruptedException, ExecutionException {
+    	return auteurService.getAuteurById(id);
     }
+    
 
     @PostMapping("/createAuteur")
     public String createAuteur(@RequestBody citation.domain.Auteur Auteur ) throws InterruptedException, ExecutionException {

@@ -2,6 +2,7 @@ package citation.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
@@ -26,25 +26,18 @@ public class AuteurService {
     public String saveAuteurDetails(Auteur auteur) throws InterruptedException, ExecutionException {
     	Firestore dbFirestore = FirestoreClient.getFirestore();
         ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection(COL_NAME).document(auteur.getNom()+auteur.getPrenom()).set(auteur);
-        return collectionsApiFuture.get().getUpdateTime().toString();
+        return collectionsApiFuture.get().getUpdateTime().toString() ;
     }
 
-    public Auteur getAuteurDetails(String id) throws InterruptedException, ExecutionException {
-    	Firestore dbFirestore = FirestoreClient.getFirestore();
-        DocumentReference documentReference = dbFirestore.collection(COL_NAME).document(id);
-        ApiFuture<DocumentSnapshot> future = documentReference.get();
-        
-
-        DocumentSnapshot document = future.get();
-        //System.out.println(document.get("nom"));
-        Auteur auteur = null;
-
-        if(document.exists()) {
-        	auteur = document.toObject(Auteur.class);
-            return auteur;
-        }else {
-            return null;
-        }
+    public Auteur getAuteurById(int id) throws InterruptedException, ExecutionException {
+    	List<Auteur> auteurs = getAllAuteurs();
+    	Optional<Auteur> auteur = auteurs.stream().filter(a -> a.getId() == id).findFirst();
+    	if(auteur.isPresent()) {
+    		return auteur.get();
+    	}
+    	else {
+    		return null;
+    	}
     }
     
     public List<Auteur> getAllAuteurs() throws InterruptedException, ExecutionException {

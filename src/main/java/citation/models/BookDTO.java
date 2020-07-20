@@ -1,13 +1,10 @@
-package citation.domain;
+package citation.models;
 
-import lombok.Data;
-
-@Data
-public class Book {
+public class BookDTO {
 	
 	public int id;
 	public String titre;
 	public String imageUrl;
-	public int auteurId;
+	public AuteurDTO auteur;
 	public int anneeParution;
 }
