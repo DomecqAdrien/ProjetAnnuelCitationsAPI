@@ -8,6 +8,7 @@ import citation.domain.Tag;
 
 public class CitationDTO {
 	public int id;
+	public int bookId;
 	public BookDTO book;
 	public String citation;
 	public List<Tag> tags;
