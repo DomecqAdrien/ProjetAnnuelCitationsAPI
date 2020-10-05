@@ -14,4 +14,5 @@ public class CitationDTO {
 	public List<Tag> tags;
 	@JsonIgnoreProperties({"citationsConnexes"})
 	public List<CitationDTO> citationsConnexes;
+	public int tauxRessemblance;
 }
